@@ -1,13 +1,27 @@
 'use server';
-import { redirect } from 'next/navigation';
-import { signIn } from '../../../lib/auth';
-import { CustomError } from '../../../lib/auth.config';
-import { loginSchema, registerSchema } from '../../../lib/zod';
-import { prisma } from '../../../lib/prisma';
+import { signIn } from '@/lib/auth';
 import { hashSync } from 'bcrypt-ts';
+import { prisma } from '@/lib/prisma';
+import { redirect } from 'next/navigation';
+import { CustomError } from '@/lib/auth.config';
+import { loginSchema, registerSchema } from '@/lib/zod';
+
+/**
+ * Handle user sign-in using Credential Provider.
+ *
+ * - Validates input using Zod Schema (`loginSchema`)
+ * - Attempts to sign-in with `signIn` from NextAuth
+ * - Redirects to `/user` if successfull
+ * - Returns error messages if validation or authentication fails
+ *
+ * @param _ - Unused Placeholder (Next.js Server Action first parameter)
+ * @param formData - FormData object from the login form
+ * @returns Object with error or message if sign-in fails, otherwise redirects
+ */
 
 async function signInCredentials(_: unknown, formData: FormData) {
     let redirectPath: string | null = null;
+
     const validatedFields = loginSchema.safeParse(Object.fromEntries(formData));
 
     if (!validatedFields.success)
@@ -23,6 +37,20 @@ async function signInCredentials(_: unknown, formData: FormData) {
         if (redirectPath) redirect(redirectPath);
     }
 }
+
+/**
+ * Handle user registration with custom logic (not via NextAuth).
+ *
+ * - Validates input using Zod schema (`registerSchema`)
+ * - Checks if email is already registered
+ * - Hashes the password using bcrypt
+ * - Creates a new user in the database
+ * - Redirects to `/login` after successful registration
+ *
+ * @param _ - Unused placeholder (Next.js Server Action first parameter)
+ * @param formData - FormData object from the registration form
+ * @returns Object with error or message if registration fails, otherwise redirects
+ */
 
 async function signUpCredentials(_: unknown, formData: FormData) {
     let redirectPath: string | null = null;
