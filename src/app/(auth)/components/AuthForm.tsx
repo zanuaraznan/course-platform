@@ -1,19 +1,19 @@
 'use client';
 
+import AuthInput from './AuthInput';
 import Button from '@/components/ui/Button';
-import {
-    useActionState,
-    useState,
-    useEffect,
-    Fragment,
-    InputHTMLAttributes,
-} from 'react';
+import { useActionState, useState, useEffect, InputHTMLAttributes } from 'react';
 
 type ActionForm = (...args: any) => Promise<any>;
 
 type Placeholder<T extends ActionForm> = Partial<
     Record<keyof Extract<Awaited<ReturnType<T>>, { error: object }>['error'], string>
 >;
+
+type FormError<T extends ActionForm> = {
+    key: keyof Placeholder<T> | null;
+    message: string | null | undefined;
+};
 
 type AuthFormProps<T extends ActionForm = ActionForm> = {
     placeholder: Placeholder<T>;
@@ -24,51 +24,57 @@ type AuthFormProps<T extends ActionForm = ActionForm> = {
     formAction: T;
 };
 
+/**
+ * Reusable authentication form component.
+ *
+ * - Receives dynamic input fields based on `placeholder` keys
+ * - Handles form state via `useActionState`
+ * - Displays server-side errors and validation messages
+ *
+ * @template T - A function type representing the server action (sign in / sign up)
+ * @param formAction - The server action to handle form submission
+ * @param placeholder - Object containing placeholder strings for each input field
+ * @param autoComplete - Object defining the autocomplete attributes for each input
+ */
+
 export default function AuthForm<T extends ActionForm>({
     formAction,
     placeholder,
     autoComplete,
 }: AuthFormProps<T>) {
-    const [state, action, pending] = useActionState(formAction, null);
+    const [formState, action, pending] = useActionState(formAction, null);
 
     const keys = Object.keys(placeholder) as string[];
 
-    const [error, setError] = useState<{
-        key: keyof Placeholder<T> | null;
-        message: string | null | undefined;
-    } | null>(null);
+    const [error, setError] = useState<FormError<T> | null>(null);
 
-    useEffect(() => {
-        const isError = !!(state && state.error);
+    useEffect(
+        function handleFieldErrorFromState() {
+            if (!formState.error) return setError(null);
 
-        const firstKey = isError
-            ? (Object.keys(state.error)[0] as keyof Placeholder<T>)
-            : null;
-        const firstMessage = isError && firstKey ? state.error[firstKey]?.[0] : null;
-        setError({ key: firstKey, message: firstMessage });
-    }, [state]);
+            const firstKey = Object.keys(formState.error)[0] as keyof Placeholder<T>;
+
+            const firstMessage = formState.error[firstKey]?.[0];
+            setError({ key: firstKey, message: firstMessage });
+        },
+        [formState]
+    );
 
     return (
         <form action={action} noValidate className='*:w-full space-y-3 mt-4'>
-            {state && state.message && (
-                <p className='text-red-500 text-sm'>{state.message}</p>
+            {formState && formState.message && (
+                <p className='text-red-500 text-sm'>{formState.message}</p>
             )}
             {keys.map((input) => (
-                <Fragment key={input}>
-                    <input
-                        type={input}
-                        name={input}
-                        autoComplete={autoComplete[input]}
-                        placeholder={placeholder[input]}
-                        onFocus={() => setError(null)}
-                        className='p-4 rounded-full ring ring-zinc-200 transition-colors focus:ring-2 focus:ring-indigo-400'
-                    />
-                    {input === error?.key && (
-                        <p className='text-left text-red-500 text-sm'>{error.message}</p>
-                    )}
-                </Fragment>
+                <AuthInput
+                    key={input}
+                    name={input}
+                    placeholder={placeholder[input]}
+                    autoComplete={autoComplete[input]}
+                    error={input === error?.key ? error.message : null}
+                    onFocus={() => setError(null)}
+                />
             ))}
-
             <Button
                 variants={{ size: 'lg', rounded: 'full' }}
                 type='submit'
