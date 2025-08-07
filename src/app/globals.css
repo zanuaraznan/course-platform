@@ -1,26 +1,34 @@
-@import "tailwindcss";
+@import 'tailwindcss';
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+@layer base {
+    html {
+        @apply text-[14px] md:text-[16px];
+    }
+    button {
+        @apply cursor-pointer;
+    }
+
+    input {
+        @apply appearance-none focus:outline-none;
+    }
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+@theme {
+    --breakpoint-sm: 360px;
+    --breakpoint-md: 768px;
+    --breakpoint-lg: 1024px;
+    --breakpoint-xl: 1280px;
+    --breakpoint-2xl: 1440px;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+@utility container {
+    @apply mx-auto;
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+@utility flex-center {
+    @apply items-center justify-center;
+}
+
+@utility onclick-opacity {
+    @apply transition-opacity hover:opacity-75 active:opacity-50;
 }
