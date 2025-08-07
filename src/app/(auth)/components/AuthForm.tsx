@@ -50,7 +50,7 @@ export default function AuthForm<T extends ActionForm>({
 
     useEffect(
         function handleFieldErrorFromState() {
-            if (!formState.error) return setError(null);
+            if (!formState || !formState.error) return setError(null);
 
             const firstKey = Object.keys(formState.error)[0] as keyof Placeholder<T>;
 
@@ -80,7 +80,7 @@ export default function AuthForm<T extends ActionForm>({
                 type='submit'
                 disabled={pending}
                 className='mt-3'>
-                Lanjutkan
+                Continue
             </Button>
         </form>
     );

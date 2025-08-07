@@ -22,7 +22,7 @@ export default function SignInProviders() {
                             }
                         }}
                         className='flex flex-center gap-2'>
-                        <Icon size={18} /> Lanjutkan dengan {provider}
+                        <Icon size={18} /> Continue with {provider}
                     </Button>
                 );
             })}

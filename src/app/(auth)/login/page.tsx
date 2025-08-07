@@ -5,15 +5,15 @@ import AuthForm from '../components/AuthForm';
 export default function Page() {
     return (
         <AuthSection
-            title='Selamat Datang Kembali'
+            title='Welcome back'
             Form={
                 <AuthForm
                     formAction={signInCredentials}
-                    placeholder={{ email: 'Alamat email', password: 'Password' }}
+                    placeholder={{ email: 'Email address', password: 'Password' }}
                     autoComplete={{ email: 'email', password: 'current-password' }}
                 />
             }
-            linkLabel='Belum punya akun?:Daftar:/register'
+            linkLabel="Don't have account yet?:Register:/register"
         />
     );
 }

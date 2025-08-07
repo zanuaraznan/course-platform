@@ -5,13 +5,13 @@ import AuthForm from '../components/AuthForm';
 export default function Page() {
     return (
         <AuthSection
-            title='Buat akun'
+            title='Create an account'
             Form={
                 <AuthForm
                     formAction={signUpCredentials}
                     placeholder={{
-                        name: 'Nama',
-                        email: 'Alamat email',
+                        name: 'Username',
+                        email: 'Email address',
                         password: 'Password',
                     }}
                     autoComplete={{
@@ -21,7 +21,7 @@ export default function Page() {
                     }}
                 />
             }
-            linkLabel='Belum punya akun?:Masuk:/login'
+            linkLabel='Already have an account?:Login:/login'
         />
     );
 }

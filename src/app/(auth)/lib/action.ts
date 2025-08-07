@@ -11,7 +11,6 @@ import { loginSchema, registerSchema } from '@/lib/zod';
  *
  * - Validates input using Zod Schema (`loginSchema`)
  * - Attempts to sign-in with `signIn` from NextAuth
- * - Redirects to `/user` if successfull
  * - Returns error messages if validation or authentication fails
  *
  * @param _ - Unused Placeholder (Next.js Server Action first parameter)
@@ -29,7 +28,7 @@ async function signInCredentials(_: unknown, formData: FormData) {
 
     try {
         await signIn('credentials', { ...validatedFields.data, redirect: false });
-        redirectPath = '/user';
+        redirectPath = '/';
     } catch (error: unknown) {
         redirectPath = null;
         if (error instanceof CustomError) return { message: error.message };

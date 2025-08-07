@@ -22,7 +22,7 @@ export default function AuthSection({
                     {label}
                 </Link>
             </p>
-            <span className='my-4 font-semibold text-sm'>ATAU</span>
+            <span className='my-4 font-semibold text-sm'>OR</span>
             <SignInProviders />
         </>
     );

@@ -33,6 +33,7 @@ export class CustomError extends AuthError {
 export default {
     pages: {
         signIn: '/login',
+        signOut: '/logout',
     },
     providers: [
         Google({ allowDangerousEmailAccountLinking: true }),
@@ -77,21 +78,25 @@ export default {
             /**
              * Handles route protection and redirection based on user authentication.
              *
-             * - If the user is **not logged in** and tries to access a protected route (`/user`), they will be redirected to the homepage (`/`).
-             * - If the user **is logged in** and tries to access a public route like `/login`, they will be redirected to `/user`.
+             * - If the user is **not admin** and tries to access a protected route (`/admin`), they will be redirected to the homepage (`/`).
+             * - If the user **is admin** and tries to access a public route like `/login`, they will be redirected to `/`.
              * - If none of the above conditions are met, access is allowed and the request proceeds as normal.
              *
              * @returns {true | NextResponse} Returns `true` to allow access to the route, or a `NextResponse.redirect` to handle redirection.
              */
             const isLoggedIn = !!auth?.user;
+            const isAdmin = auth?.user.role === 'ADMIN';
             const pathname = request.nextUrl.pathname;
 
-            if (!isLoggedIn && pathname.startsWith('/user')) {
+            if ((!isLoggedIn || !isAdmin) && pathname.startsWith('/admin')) {
                 return NextResponse.redirect(new URL('/', request.url));
             }
 
             if (isLoggedIn && pathname.startsWith('/login')) {
-                return NextResponse.redirect(new URL('/user', request.url));
+                if (isAdmin) {
+                    return NextResponse.redirect(new URL('/admin', request.url));
+                }
+                return NextResponse.redirect(new URL('/', request.url));
             }
 
             return true;
