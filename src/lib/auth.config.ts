@@ -77,28 +77,29 @@ export default {
         authorized: async ({ request, auth }) => {
             /**
              * Handles route protection and redirection based on user authentication.
-             *
-             * - If the user is **not admin** and tries to access a protected route (`/admin`), they will be redirected to the homepage (`/`).
-             * - If the user **is admin** and tries to access a public route like `/login`, they will be redirected to `/`.
-             * - If none of the above conditions are met, access is allowed and the request proceeds as normal.
-             *
              * @returns {true | NextResponse} Returns `true` to allow access to the route, or a `NextResponse.redirect` to handle redirection.
              */
-            const isLoggedIn = !!auth?.user;
             const isAdmin = auth?.user.role === 'ADMIN';
             const pathname = request.nextUrl.pathname;
+            const authRoutes = ['/register', '/login'];
 
-            if ((!isLoggedIn || !isAdmin) && pathname.startsWith('/admin')) {
-                return NextResponse.redirect(new URL('/', request.url));
+            function redirect(path: string) {
+                return NextResponse.redirect(new URL(path, request.url));
             }
 
-            if (isLoggedIn && pathname.startsWith('/login')) {
-                if (isAdmin) {
-                    return NextResponse.redirect(new URL('/admin', request.url));
-                }
-                return NextResponse.redirect(new URL('/', request.url));
+            // 1. Admin routes protection
+            if (pathname.startsWith('/admin')) {
+                if (!isAdmin) return redirect('/');
+                if (pathname === '/admin') return redirect('/admin/dashboard');
+                return true;
             }
 
+            // 2. Login page access
+            if (authRoutes.includes(pathname)) {
+                return isAdmin ? redirect('/admin/dashboard') : redirect('/');
+            }
+
+            // 3. Default allow
             return true;
         },
         jwt({ token, user }) {

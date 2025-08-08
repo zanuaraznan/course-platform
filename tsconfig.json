@@ -20,6 +20,8 @@
         ],
         "baseUrl": ".",
         "paths": {
+            "@consumer/*": ["src/app/(consumer)/*"],
+            "@admin/*": ["src/app/admin/*"],
             "@/*": ["src/*"]
         }
     },

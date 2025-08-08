@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { auth } from '@/lib/auth';
 import Button from '@/components/ui/Button';
+import UserButton from '@consumer/components/UserButton';
 
 const navList: Record<string, string> = {
     courses: 'Courses',
@@ -35,6 +36,7 @@ export default async function Navbar() {
                 {session ? (
                     <ul className='flex items-center gap-4'>
                         <ConsumerNavList />
+                        <UserButton />
                     </ul>
                 ) : (
                     <Link href='/login'>
