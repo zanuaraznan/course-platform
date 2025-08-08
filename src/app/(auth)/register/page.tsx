@@ -1,27 +1,32 @@
-import { signUpCredentials } from '@/app/(auth)/lib/action';
 import AuthSection from '../components/AuthSection';
-import AuthForm from '../components/AuthForm';
+import { signUpCredentials } from '@/app/(auth)/lib/action';
+import FormWrapper, { Form, FormInputs, SubmitButton } from '@/components/ui/Form';
 
 export default function Page() {
     return (
         <AuthSection
             title='Create an account'
             Form={
-                <AuthForm
+                <FormWrapper
                     formAction={signUpCredentials}
-                    placeholder={{
-                        name: 'Username',
-                        email: 'Email address',
-                        password: 'Password',
-                    }}
-                    autoComplete={{
-                        name: 'name',
-                        email: 'email',
-                        password: 'current-password',
-                    }}
-                />
+                    inputConfig={{
+                        email: {
+                            type: 'email',
+                            autoComplete: 'email',
+                            placeholder: 'Email address',
+                        },
+                        name: { placeholder: 'Username' },
+                        password: {
+                            autoComplete: 'current-password',
+                            type: 'password',
+                        },
+                    }}>
+                    <Form>
+                        <FormInputs />
+                        <SubmitButton>Continue</SubmitButton>
+                    </Form>
+                </FormWrapper>
             }
-            linkLabel='Already have an account?:Login:/login'
-        />
+            linkLabel='Already have an account?:Login:/login'></AuthSection>
     );
 }

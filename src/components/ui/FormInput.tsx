@@ -1,27 +1,30 @@
-type AuthInputProps = {
-    name: string;
-    placeholder?: string;
-    autoComplete?: string;
+import { InputHTMLAttributes } from 'react';
+
+type FormInputProps = {
     error?: string | null;
     onFocus?: () => void;
-};
+} & Pick<
+    InputHTMLAttributes<HTMLInputElement>,
+    'name' | 'type' | 'placeholder' | 'autoComplete'
+>;
 
-export default function AuthInput({
+export default function FormInput({
     name,
+    type,
     placeholder,
     autoComplete,
     error,
     onFocus,
-}: AuthInputProps) {
+}: FormInputProps) {
     return (
         <>
             <input
                 name={name}
-                type={name}
+                type={type}
                 placeholder={placeholder}
                 autoComplete={autoComplete}
                 onFocus={onFocus}
-                className='p-4 rounded-full ring ring-zinc-200 transition-colors focus:ring-2 focus:ring-indigo-400'
+                className='placeholder:capitalize p-4 rounded-full ring ring-zinc-200 transition-colors focus:ring-2 focus:ring-indigo-400'
             />
             {error && <p className='text-left text-red-500 text-sm'>{error}</p>}
         </>

@@ -4,7 +4,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
     return (
         <>
             <Navbar />
-            {children}
+            <main className='my-6'>{children}</main>
         </>
     );
 }

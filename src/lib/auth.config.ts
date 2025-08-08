@@ -80,6 +80,7 @@ export default {
              * @returns {true | NextResponse} Returns `true` to allow access to the route, or a `NextResponse.redirect` to handle redirection.
              */
             const isAdmin = auth?.user.role === 'ADMIN';
+            const isLoggedIn = !!auth?.user;
             const pathname = request.nextUrl.pathname;
             const authRoutes = ['/register', '/login'];
 
@@ -95,7 +96,7 @@ export default {
             }
 
             // 2. Login page access
-            if (authRoutes.includes(pathname)) {
+            if (isLoggedIn && authRoutes.includes(pathname)) {
                 return isAdmin ? redirect('/admin/dashboard') : redirect('/');
             }
 

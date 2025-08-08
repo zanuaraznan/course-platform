@@ -12,7 +12,7 @@ const buttonVariants = cva(
             },
             size: {
                 sm: 'p-2 px-4 text-sm',
-                md: 'p-3 px-6',
+                md: 'p-3 px-5',
                 lg: 'p-5 px-7',
             },
             rounded: {
