@@ -32,3 +32,25 @@
 @utility onclick-opacity {
     @apply transition-opacity hover:opacity-75 active:opacity-50;
 }
+
+.bg-skeleton-loading {
+    background: linear-gradient(
+        135deg,
+        var(--color-zinc-200),
+        var(--color-zinc-50),
+        var(--color-zinc-200),
+        var(--color-zinc-50),
+        var(--color-zinc-200)
+    );
+    background-size: 200% 200%;
+    animation: bg-move 2s linear infinite;
+}
+
+@keyframes bg-move {
+    from {
+        background-position-x: 0%;
+    }
+    to {
+        background-position-x: -200%;
+    }
+}

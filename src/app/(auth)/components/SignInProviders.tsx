@@ -16,9 +16,9 @@ export default function SignInProviders() {
                         key={provider}
                         onClick={() => {
                             if (provider === 'Google') {
-                                signIn('google', { redirectTo: '/user' });
+                                signIn('google', { redirectTo: '/' });
                             } else {
-                                signIn('github', { redirectTo: '/user' });
+                                signIn('github', { redirectTo: '/' });
                             }
                         }}
                         className='flex flex-center gap-2'>

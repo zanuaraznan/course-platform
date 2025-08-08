@@ -45,6 +45,10 @@ function ModalProvider({ children }: { children: ReactNode }) {
         return () => document.removeEventListener('mousedown', handleClickOutside);
     }, []);
 
+    useEffect(() => {
+        if (isOpen && modalRef.current) modalRef.current.focus();
+    }, [isOpen, modalRef]);
+
     return (
         <ModalContext.Provider
             value={{ isOpen, isAnimate, modalRef, openModal, closeModal }}>
